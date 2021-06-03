@@ -1,4 +1,4 @@
 # otimizacao-cervejas
 
 # Integrantes
- ### Gabriel Zilmar, Paulo Mesquita, VInicius Viterbo
+ ### Gabriel Zilmar, Paulo Mesquita, Vinicius Viterbo
