@@ -1,8 +1,10 @@
-import { Card, Button, Row, Col, Form, Input, InputNumber } from "antd";
+import { Card, Button, Row, Col, Form, Input, InputNumber, Table } from "antd";
 import { FieldNumberOutlined /*, GithubOutlined */ } from "@ant-design/icons";
 import logo from "../assets/logo.png";
 import React from "react";
 import "../index.css";
+import api from '../services/api';
+import Modal from "antd/lib/modal/Modal";
 
 export default class App extends React.Component {
   state = {
@@ -19,9 +21,105 @@ export default class App extends React.Component {
       z1: undefined,
       z2: undefined,
     },
+    dados_tabela: undefined,
     show_info: true,
     show_calc: false,
+    loading: false,
   };
+
+  colunas = [
+    {
+      title: 'producaoImperialIPA',
+      dataIndex: 'producaoImperialIPA',
+      width: '175px',
+      align: 'center',
+      render: (value) => Math.floor(value),
+    },
+    {
+      title: 'producaoDoubleIPA',
+      dataIndex: 'producaoDoubleIPA',
+      width: '175px',
+      align: 'center',
+      render: (value) => Math.floor(value),
+    },
+    {
+      title: 'Malte Pale Ale (kg)',
+      dataIndex: 'x1',
+      width: '175px',
+      align: 'center',
+      render: (value) => Math.floor(value),
+    },
+    {
+      title: 'Malte Carared (kg)',
+      dataIndex: 'x2',
+      width: '175px',
+      align: 'center',
+      render: (value) => Math.floor(value),
+    },
+    {
+      title: 'Malte Chateau Cara Blond (kg)',
+      dataIndex: 'x3',
+      width: '175px',
+      align: 'center',
+      render: (value) => Math.floor(value),
+    },
+    {
+      title: 'Lúpulo Galena (kg)',
+      dataIndex: 'y1',
+      width: '175px',
+      align: 'center',
+      render: (value) => Math.floor(value),
+    },
+    {
+      title: 'Lúpulo Columbus (kg)',
+      dataIndex: 'y2',
+      width: '175px',
+      align: 'center',
+      render: (value) => Math.floor(value),
+    },
+    {
+      title: 'Lúpulo Cascade (kg)',
+      dataIndex: 'y3',
+      width: '175px',
+      align: 'center',
+      render: (value) => Math.floor(value),
+    },
+    {
+      title: 'Centennial',
+      dataIndex: 'y4',
+      width: '175px',
+      align: 'center',
+      render: (value) => Math.floor(value),
+    },
+    {
+      title: 'Chinook',
+      dataIndex: 'y5',
+      width: '175px',
+      align: 'center',
+      render: (value) => Math.floor(value),
+    },
+    {
+      title: 'Aramis',
+      dataIndex: 'y6',
+      width: '175px',
+      align: 'center',
+      render: (value) => Math.floor(value),
+    },
+    {
+      title: 'Levedura US-05 (kg)',
+      dataIndex: 'z1',
+      width: '175px',
+      align: 'center',
+      render: (value) => Math.floor(value),
+    },
+    {
+      title: 'Levedura SafAle BE 134 (kg)',
+      dataIndex: 'z2',
+      width: '175px',
+      align: 'center',
+      render: (value) => Math.floor(value),
+    },
+  ]
 
   inverte_exibicao = () => {
     const { show_info, show_calc } = this.state;
@@ -33,13 +131,12 @@ export default class App extends React.Component {
   };
 
   changeVal = (field, value) => {
-    console.log(field, value)
     this.setState({
       form :{
         ...this.state.form,
         [field]: value,
       }
-    }, () => console.log(this.state.form[field]));
+    });
   };
 
   generateField = (field, placeholder) => {
@@ -49,15 +146,40 @@ export default class App extends React.Component {
         placeholder={placeholder}
         style={{ width: "100%" }}
         onChange={(val) => this.changeVal(field, val)}
+        disabled={this.state.loading}
       />
     );
   };
 
-  finalizado = () => {
-    const { form } = this.state;
+  enviaForm = async (event) => {
+    event.preventDefault();
 
-    console.log(form)
+    const { form } = this.state;
+    
+    this.setState({ loading: true })
+
+    let url = 'api/cerveja?'
+    Object.entries(form).forEach((arr) => {
+      const prop = arr[0]
+      const val = arr[1]
+      url += `${prop}=${val}&`
+    })
+
+    try {
+      const dados_tabela = await api.post(url);
+      this.setState({ dados_tabela: [dados_tabela] }, () => console.log(this.state.dados_tabela))
+    }
+    catch (err) {
+      alert('Erro ao tentar contatar o servidor. Tente novamente.');
+    }
+    finally {
+      this.setState({ loading: false })
+    }
   };
+
+  limpaTabela = () => {
+    this.setState({ dados_tabela: undefined })
+  }
 
   render() {
     const { show_info, show_calc } = this.state;
@@ -124,6 +246,15 @@ export default class App extends React.Component {
                   style={{ marginBottom: "25px" }}
                   justify="space-between"
                 >
+                  <Col span={24}>
+                    {this.generateField("dindin", "Orçamento para ingredientes (R$)")}
+                  </Col>
+                </Row>
+                <Row
+                  gutter={[12, 12]}
+                  style={{ marginBottom: "25px" }}
+                  justify="space-between"
+                >
                   <Col span={8}>
                     {this.generateField("x1", "Malte Pale Ale (kg)")}
                   </Col>
@@ -178,16 +309,44 @@ export default class App extends React.Component {
                 </Row>
 
                 <Row justify="space-between">
-                  <Button onClick={() => this.inverte_exibicao()}>Info</Button>
-                  <Button type="primary" onClick={() => this.finalizado()}>
+                  <Button
+                    disabled={this.state.loading}
+                    onClick={() => this.inverte_exibicao()}
+                  >
+                    Info
+                  </Button>
+                  <Button
+                    type="primary"
+                    onClick={this.enviaForm}
+                    disabled={this.state.loading}
+                  >
                     Calcular
                   </Button>
                 </Row>
               </>
             )}
+
+            {this.state.dados_tabela && (
+              <Modal
+                title="Resultados obtidos"
+                style={{ width: '425px' }}
+                centered
+                visible
+                onOk={this.limpaTabela}
+                onCancel={this.limpaTabela}
+                footer={[]}
+              >
+                <Table 
+                  columns={this.colunas}
+                  dataSource={this.state.dados_tabela}
+                  scroll={{ x: 400 }}
+                  pagination={false}
+                />
+              </Modal>
+            )}
           </Card>
         </Col>
       </Row>
     );
-  }
+  };
 }
