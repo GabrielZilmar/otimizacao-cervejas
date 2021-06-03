@@ -219,23 +219,10 @@ export default class App extends React.Component {
               <>
                 <div style={{ color: "#000000" }}>
                   <p>
-                    Mussum Ipsum, cacilds vidis litro abertis. Manduma pindureta
-                    quium dia nois paga. Interessantiss quisso pudia ce receita
-                    de bolis, mais bolis eu num gostis. Praesent vel viverra
-                    nisi. Mauris aliquet nunc non turpis scelerisque, eget. Suco
-                    de cevadiss deixa as pessoas mais interessantis.
+                  Maximizar o lucro é uma tarefa sempre muito visada entre produtores. O lucroleva em consideração a quantidade de recursos gastos e a quantidade de recursos obtidos,uma vez que a quantidade obtida deve ser maior que a gasta. No caso na venda das cervejas, o lucro  é obtido a partir da o valor obtido na venda de cervejas menos a quantidadede dinheiro gasto na compra de ingredientes.
                   </p>
                   <p>
-                    Mais vale um bebadis conhecidiss, que um alcoolatra
-                    anonimis. Si u mundo tá muito paradis? Toma um mé que o
-                    mundo vai girarzis! Paisis, filhis, espiritis santis.
-                    Detraxit consequat et quo num tendi nada.
-                  </p>
-                  <p>
-                    Casamentiss faiz malandris se pirulitá. Nec orci ornare
-                    consequat. Praesent lacinia ultrices consectetur. Sed non
-                    ipsum felis. Leite de capivaris, leite de mula manquis sem
-                    cabeça. A ordem dos tratores não altera o pão duris.{" "}
+                  Para poder obter o maior lucro nesse problema constru ́ımos uma aplicação web, a qual disponibiliza a quantidade de cada tipo de cerveja que deve ser produzida paraobter o maior lucro. A aplicação tem seu backend é produzido em Pythone o seu frontend produzido em ReactJs, sendo de simples uso, tendo apenas que informar os preços decada ingrediente e o dinheiro disponível para a compra dos mesmos.
                   </p>
                 </div>
                 <Button onClick={() => this.inverte_exibicao()}>
