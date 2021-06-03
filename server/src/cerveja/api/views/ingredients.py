@@ -23,8 +23,8 @@ def cerveja(request):
     model.ingredientes = pyEnv.RangeSet(n)
 
     model.vars = pyEnv.RangeSet(2)
-    model.variaveis = pyEnv.Var(model.vars)
-    model.ingComprados = pyEnv.Var(model.ingredientes)
+    model.variaveis = pyEnv.Var(model.vars, within=pyEnv.PositiveIntegers)
+    model.ingComprados = pyEnv.Var(model.ingredientes, within=pyEnv.PositiveIntegers)
 
     model.vPreco = pyEnv.Param(model.ingredientes, initialize=lambda model, i: precos[i-1])
     model.vQuantidade = pyEnv.Param(model.vars, model.ingredientes, initialize=lambda model, i, j: quantidade[i-1][j-1])
