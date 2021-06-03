@@ -1,3 +1,4 @@
 Django==3.2.3
 djangorestframework==3.12.4
 Pyomo==6.0
+django-cors-headers==3.4.0

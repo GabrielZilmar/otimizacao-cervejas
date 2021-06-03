@@ -33,7 +33,7 @@ export default class App extends React.Component {
       dataIndex: 'producaoImperialIPA',
       width: '175px',
       align: 'center',
-      render: (value) => Math.floor(value),
+      render: (value) => {console.log(value); return Math.floor(value)},
     },
     {
       title: 'producaoDoubleIPA',
@@ -159,15 +159,20 @@ export default class App extends React.Component {
     this.setState({ loading: true })
 
     let url = 'api/cerveja?'
+    url += `dindin=${form.dindin}&precos=`
     Object.entries(form).forEach((arr) => {
       const prop = arr[0]
       const val = arr[1]
-      url += `${prop}=${val}&`
+      if(prop !== 'dindin') {
+        url += `${val},`
+      }
     })
 
+    url = url.replace(/,\s*$/, "");
+
     try {
-      const dados_tabela = await api.post(url);
-      this.setState({ dados_tabela: [dados_tabela] }, () => console.log(this.state.dados_tabela))
+      const dados_tabela = await api.get(url);
+      this.setState({ dados_tabela: [dados_tabela.data] }, () => console.log(this.state.dados_tabela))
     }
     catch (err) {
       alert('Erro ao tentar contatar o servidor. Tente novamente.');

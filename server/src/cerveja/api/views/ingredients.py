@@ -86,8 +86,6 @@ def cerveja(request):
     response['z1'] = model.ingComprados[10]()
     response['z2'] = model.ingComprados[11]()
 
-    print(response)
-
     response = json.dumps(response, indent = 4)
 
     return HttpResponse(response, content_type='application/json; charset=utf8')
